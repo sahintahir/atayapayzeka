@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ata AI — Türkiye'nin Yapay Zekası</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Bebas+Neue&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --kırmızı: #C0392B;
+      --kırmızı-koyu: #922B21;
+      --altın: #D4AC0D;
+      --altın-açık: #F9E547;
+      --siyah: #0A0A0A;
+      --koyu: #111111;
+      --koyu2: #1A1A1A;
+      --beyaz: #F5F0E8;
+      --gri: #888;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--siyah);
+      color: var(--beyaz);
+      font-family: 'IBM Plex Sans', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 12px; height: 12px;
+      background: var(--kırmızı);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid var(--altın);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: all 0.15s ease;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 24px 60px;
+      backdrop-filter: blur(20px);
+      background: rgba(10,10,10,0.7);
+      border-bottom: 1px solid rgba(212,172,13,0.15);
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 4px;
+      color: var(--beyaz);
+    }
+    .logo span { color: var(--kırmızı); }
+    nav ul { list-style: none; display: flex; gap: 40px; }
+    nav ul a {
+      text-decoration: none;
+      color: var(--gri);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    nav ul a:hover { color: var(--altın); }
+    .nav-btn {
+      background: var(--kırmızı);
+      color: white;
+      border: none;
+      padding: 10px 28px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .nav-btn:hover { background: var(--kırmızı-koyu); transform: translateY(-2px); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 120px 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Geometric background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      right: -100px; top: 50%;
+      transform: translateY(-50%);
+      width: 700px; height: 700px;
+      border: 1px solid rgba(192,57,43,0.2);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: 50px; top: 50%;
+      transform: translateY(-50%);
+      width: 500px; height: 500px;
+      border: 1px solid rgba(212,172,13,0.15);
+      border-radius: 50%;
+    }
+
+    .hero-noise {
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .hero-left { position: relative; z-index: 1; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(192,57,43,0.15);
+      border: 1px solid rgba(192,57,43,0.4);
+      padding: 6px 18px;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--kırmızı);
+      margin-bottom: 36px;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--kırmızı);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 6vw, 7rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -2px;
+      margin-bottom: 12px;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--altın);
+      display: block;
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--gri);
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 28px 0 48px;
+      font-weight: 300;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-btns {
+      display: flex; gap: 16px;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+    .btn-primary {
+      background: var(--kırmızı);
+      color: white;
+      padding: 16px 40px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      cursor: none;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--altın);
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+      z-index: -1;
+    }
+    .btn-primary:hover::after { transform: translateX(0); }
+    .btn-primary:hover { color: var(--siyah); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--beyaz);
+      padding: 16px 40px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1px solid rgba(245,240,232,0.3);
+      cursor: none;
+      transition: all 0.3s;
+    }
+    .btn-outline:hover { border-color: var(--altın); color: var(--altın); }
+
+    /* Stats strip */
+    .stats {
+      position: absolute; bottom: 60px; left: 60px;
+      display: flex; gap: 60px;
+      animation: fadeUp 0.8s 0.5s ease both;
+      z-index: 1;
+    }
+    .stat-item { text-align: left; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      color: var(--altın);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--gri);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Right side visual */
+    .hero-right {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .ai-orb {
+      width: 320px; height: 320px;
+      position: relative;
+    }
+    .orb-core {
+      position: absolute; inset: 20%;
+      background: radial-gradient(circle at 35% 35%, var(--kırmızı), var(--kırmızı-koyu) 60%, #1a0000);
+      border-radius: 50%;
+      box-shadow: 0 0 80px rgba(192,57,43,0.5), 0 0 160px rgba(192,57,43,0.2);
+      animation: breathe 3s ease-in-out infinite;
+    }
+    .orb-ring {
+      position: absolute; inset: 0;
+      border: 1px solid rgba(212,172,13,0.4);
+      border-radius: 50%;
+      animation: spin 8s linear infinite;
+    }
+    .orb-ring::before {
+      content: '';
+      position: absolute;
+      width: 10px; height: 10px;
+      background: var(--altın);
+      border-radius: 50%;
+      top: 0; left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 20px var(--altın);
+    }
+    .orb-ring-2 {
+      position: absolute; inset: 15%;
+      border: 1px solid rgba(192,57,43,0.3);
+      border-radius: 50%;
+      animation: spin 12s linear infinite reverse;
+    }
+    .orb-text {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .orb-text span:first-child {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 6px;
+      color: white;
+      text-shadow: 0 0 30px rgba(255,255,255,0.5);
+    }
+    .orb-text span:last-child {
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+    }
+
+    @keyframes breathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      background: var(--kırmızı);
+      padding: 14px 0;
+      overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .marquee-track {
+      display: flex;
+      animation: marquee 20s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-track span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 6px;
+      padding: 0 40px;
+      color: rgba(255,255,255,0.9);
+    }
+    .marquee-track span.dot { color: var(--altın); }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ── UZMANLIK ALANLARI ── */
+    .section {
+      padding: 120px 60px;
+    }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 80px;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      color: var(--kırmızı);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 4vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+    }
+    .section-title em { color: var(--altın); font-style: italic; }
+    .section-desc {
+      max-width: 380px;
+      color: var(--gri);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    /* Alan grid */
+    .alan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .alan-kart {
+      background: var(--koyu2);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+      transition: background 0.4s;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    .alan-kart::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gradient);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .alan-kart:hover { background: #1f1f1f; }
+    .alan-kart:hover::before { transform: scaleX(1); }
+    .alan-kart:hover .alan-icon { transform: scale(1.1) rotate(-5deg); }
+
+    .alan-kart[data-color="kirmizi"] { --gradient: linear-gradient(90deg, var(--kırmızı), var(--kırmızı-koyu)); }
+    .alan-kart[data-color="altin"] { --gradient: linear-gradient(90deg, var(--altın), #F39C12); }
+    .alan-kart[data-color="mavi"] { --gradient: linear-gradient(90deg, #2980B9, #1ABC9C); }
+    .alan-kart[data-color="yesil"] { --gradient: linear-gradient(90deg, #27AE60, #1ABC9C); }
+    .alan-kart[data-color="mor"] { --gradient: linear-gradient(90deg, #8E44AD, #3498DB); }
+    .alan-kart[data-color="turuncu"] { --gradient: linear-gradient(90deg, #E67E22, #F39C12); }
+    .alan-kart[data-color="pembe"] { --gradient: linear-gradient(90deg, #C0392B, #8E44AD); }
+    .alan-kart[data-color="cam"] { --gradient: linear-gradient(90deg, #16A085, #2ECC71); }
+    .alan-kart[data-color="lacivert"] { --gradient: linear-gradient(90deg, #2C3E50, #3498DB); }
+
+    .alan-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      color: rgba(255,255,255,0.04);
+      position: absolute;
+      top: 20px; right: 30px;
+      line-height: 1;
+    }
+    .alan-icon {
+      font-size: 2.2rem;
+      margin-bottom: 24px;
+      display: block;
+      transition: transform 0.3s;
+    }
+    .alan-baslik {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--beyaz);
+    }
+    .alan-aciklama {
+      font-size: 0.88rem;
+      color: var(--gri);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .alan-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 24px;
+    }
+    .tag {
+      font-size: 0.65rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--gri);
+    }
+
+    /* ── DEMO SECTION ── */
+    .demo-section {
+      background: var(--koyu);
+      padding: 120px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .demo-section::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(192,57,43,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .demo-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .chat-window {
+      background: var(--koyu2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0;
+      overflow: hidden;
+      margin-top: 60px;
+    }
+    .chat-header {
+      background: rgba(192,57,43,0.1);
+      border-bottom: 1px solid rgba(192,57,43,0.2);
+      padding: 16px 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .chat-dots { display:flex;gap:6px; }
+    .chat-dots span {
+      width:10px;height:10px;border-radius:50%;
+    }
+    .chat-dots span:nth-child(1){background:#C0392B;}
+    .chat-dots span:nth-child(2){background:var(--altın);}
+    .chat-dots span:nth-child(3){background:rgba(255,255,255,0.2);}
+    .chat-title {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      color: var(--gri);
+      text-transform: uppercase;
+    }
+
+    .chat-body { padding: 40px 32px; }
+    .msg { display: flex; gap: 16px; margin-bottom: 28px; }
+    .msg-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .msg.user .msg-avatar { background: rgba(255,255,255,0.1); color: var(--beyaz); }
+    .msg.ai .msg-avatar { background: var(--kırmızı); color: white; font-family: 'Bebas Neue'; letter-spacing: 1px; font-size: 0.85rem; }
+    .msg-bubble {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 16px 20px;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: rgba(245,240,232,0.9);
+      max-width: 600px;
+    }
+    .msg.user .msg-bubble { background: rgba(192,57,43,0.08); border-color: rgba(192,57,43,0.2); }
+    .msg-bubble strong { color: var(--altın); }
+
+    .chat-input-area {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 32px;
+      display: flex; gap: 12px; align-items: center;
+    }
+    .chat-input {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 14px 20px;
+      color: var(--beyaz);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .chat-input::placeholder { color: rgba(255,255,255,0.2); }
+    .chat-input:focus { border-color: rgba(192,57,43,0.4); }
+    .chat-send {
+      background: var(--kırmızı);
+      border: none;
+      padding: 14px 28px;
+      color: white;
+      cursor: none;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: background 0.3s;
+    }
+    .chat-send:hover { background: var(--kırmızı-koyu); }
+
+    /* Typing indicator */
+    .typing { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+    .typing span {
+      width: 6px; height: 6px;
+      background: var(--gri);
+      border-radius: 50%;
+      animation: typing 1.2s infinite;
+    }
+    .typing span:nth-child(2){animation-delay:0.2s;}
+    .typing span:nth-child(3){animation-delay:0.4s;}
+    @keyframes typing{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+    /* ── HAKKINDA ── */
+    .hakkinda {
+      padding: 120px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+    }
+    .hakkinda-visual {
+      position: relative;
+    }
+    .flag-art {
+      width: 100%;
+      aspect-ratio: 3/2;
+      position: relative;
+      overflow: hidden;
+    }
+    .flag-bg {
+      position: absolute; inset: 0;
+      background: var(--kırmızı);
+    }
+    .flag-crescent {
+      position: absolute;
+      top: 50%; left: 45%;
+      transform: translate(-50%, -50%);
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+    }
+    .flag-crescent::before {
+      content: '';
+      position: absolute;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      top: 0; left: 0;
+    }
+    .flag-crescent::after {
+      content: '';
+      position: absolute;
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      background: var(--kırmızı);
+      top: 5px; left: 25px;
+    }
+    .ai-badge {
+      position: absolute;
+      bottom: -20px; right: -20px;
+      background: var(--koyu2);
+      border: 1px solid rgba(212,172,13,0.3);
+      padding: 24px 32px;
+    }
+    .ai-badge-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--altın);
+      line-height: 1;
+    }
+    .ai-badge-text {
+      font-size: 0.7rem;
+      color: var(--gri);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .hakkinda-content .section-label { margin-bottom: 12px; }
+    .hakkinda-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 28px;
+    }
+    .hakkinda-content h2 em { color: var(--altın); font-style: italic; }
+    .hakkinda-content p {
+      color: var(--gri);
+      font-size: 0.95rem;
+      line-height: 1.9;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+
+    .ozellikler {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 40px;
+    }
+    .ozellik {
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .ozellik-icon {
+      width: 32px; height: 32px;
+      background: rgba(192,57,43,0.15);
+      border: 1px solid rgba(192,57,43,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .ozellik-text {
+      font-size: 0.82rem;
+      color: rgba(245,240,232,0.7);
+      line-height: 1.6;
+    }
+    .ozellik-text strong { color: var(--beyaz); display: block; margin-bottom: 2px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--koyu);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 80px 60px 40px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+    }
+    .footer-logo span { color: var(--kırmızı); }
+    .footer-desc {
+      font-size: 0.85rem;
+      color: var(--gri);
+      line-height: 1.8;
+      max-width: 280px;
+    }
+    .footer-col h4 {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--altın);
+      margin-bottom: 24px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li {
+      margin-bottom: 12px;
+    }
+    .footer-col ul a {
+      text-decoration: none;
+      color: var(--gri);
+      font-size: 0.88rem;
+      transition: color 0.3s;
+    }
+    .footer-col ul a:hover { color: var(--beyaz); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-bottom p {
+      font-size: 0.78rem;
+      color: rgba(136,136,136,0.6);
+    }
+    .footer-bottom p span { color: var(--kırmızı); }
+
+    /* Responsive */
+    @media(max-width: 900px){
+      nav { padding: 20px 24px; }
+      nav ul { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+      .hero-right { display: none; }
+      .stats { left: 24px; bottom: 40px; gap: 30px; }
+      .section, .demo-section, .hakkinda { padding: 80px 24px; }
+      .alan-grid { grid-template-columns: 1fr; }
+      .hakkinda { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; gap: 40px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">ATA <span>AI</span></div>
+    <ul>
+      <li><a href="#alanlar">Uzmanlık</a></li>
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#hakkinda">Hakkında</a></li>
+      <li><a href="https://github.com/ata-ai" target="_blank">GitHub</a></li>
+    </ul>
+    <button class="nav-btn">Hemen Dene</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-noise"></div>
+    <div class="hero-left">
+      <div class="hero-tag">🇹🇷 Türkiye'nin Yapay Zekası</div>
+      <h1>Her Alanda<br><em>Uzman</em><br>Yapay Zeka</h1>
+      <p class="hero-sub">
+        Ata AI — Türk mühendislik anlayışıyla geliştirilen, kod yazmaktan tıbbi danışmanlığa,
+        hukuki sorulardan eğitime kadar her alanda size destek veren çok amaçlı yapay zeka.
+      </p>
+      <div class="hero-btns">
+        <button class="btn-primary">Hemen Başla</button>
+        <button class="btn-outline">GitHub'da Gör</button>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="ai-orb">
+        <div class="orb-ring"></div>
+        <div class="orb-ring-2"></div>
+        <div class="orb-core"></div>
+        <div class="orb-text">
+          <span>ATA</span>
+          <span>YAPAY ZEKA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-num">9+</div>
+        <div class="stat-label">Uzman Alan</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Türk Yapımı</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">7/24</div>
+        <div class="stat-label">Erişilebilir</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>KOD & TEKNOLOJİ</span><span class="dot">◆</span>
+      <span>TIP & SAĞLIK</span><span class="dot">◆</span>
+      <span>HUKUK & FİNANS</span><span class="dot">◆</span>
+      <span>EĞİTİM & BİLİM</span><span class="dot">◆</span>
+      <span>SANAT & TASARIM</span><span class="dot">◆</span>
+      <span>PSİKOLOJİ</span><span class="dot">◆</span>
+      <span>MÜHENDİSLİK</span><span class="dot">◆</span>
+      <span>TARİH & FELSEFE</span><span class="dot">◆</span>
+      <span>İŞ & STRATEJİ</span><span class="dot">◆</span>
+      <!-- repeat -->
+      <span>KOD & TEKNOLOJİ</span><span class="dot">◆</span>
+      <span>TIP & SAĞLIK</span><span class="dot">◆</span>
+      <span>HUKUK & FİNANS</span><span class="dot">◆</span>
+      <span>EĞİTİM & BİLİM</span><span class="dot">◆</span>
+      <span>SANAT & TASARIM</span><span class="dot">◆</span>
+      <span>PSİKOLOJİ</span><span class="dot">◆</span>
+      <span>MÜHENDİSLİK</span><span class="dot">◆</span>
+      <span>TARİH & FELSEFE</span><span class="dot">◆</span>
+      <span>İŞ & STRATEJİ</span><span class="dot">◆</span>
+    </div>
+  </div>
+
+  <!-- UZMANLIK ALANLARI -->
+  <section class="section" id="alanlar">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Uzmanlık Alanları</div>
+        <h2 class="section-title">Her Konuda<br><em>Yanınızdayım</em></h2>
+      </div>
+      <p class="section-desc">
+        Tek bir yapay zekayla tüm ihtiyaçlarınızı karşılayın.
+        Ata AI, uzman düzeyinde bilgi ile sade bir arayüzü bir araya getirir.
+      </p>
+    </div>
+
+    <div class="alan-grid">
+      <div class="alan-kart" data-color="kirmizi">
+        <span class="alan-num">01</span>
+        <span class="alan-icon">💻</span>
+        <div class="alan-baslik">Kod & Teknoloji</div>
+        <p class="alan-aciklama">Python, JavaScript, Go, Rust ve daha fazlası. Hata ayıklama, mimari tasarım, kod incelemesi ve algoritma optimizasyonu.</p>
+        <div class="alan-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Web Dev</span>
+          <span class="tag">DevOps</span>
+        </div>
+      </div>
+
+      <div class="alan-kart" data-color="altin">
+        <span class="alan-num">02</span>
+        <span class="alan-icon">🏥</span>
+        <div class="alan-baslik">Tıp & Sağlık</div>
+        <p class="alan-aciklama">Semptom analizi, ilaç bilgisi, sağlıklı yaşam önerileri ve tıbbi terminoloji. Doktor tavsiyesini destekleyici bilgi.</p>
+        <div class="alan-tags">
+          <span class="tag">Anatomi</span>
+          <span class="tag">Beslenme</span>
+          <span class="tag">Patoloji</span>
+        </div>
+      </div>
+
+      <div class="alan-kart" data-color="mavi">
+        <span class="alan-num">03</span>
+        <span class="alan-icon">⚖️</span>
+        <div class="alan-baslik">Hukuk & Finans</div>
+        <p class="alan-aciklama">Türk hukuku, sözleşme analizi, vergi danışmanlığı, yatırım stratejileri ve finansal planlama rehberliği.</p>
+        <div class="alan-tags">
+          <span class="tag">Türk Hukuku</span>
+          <span class="tag">Vergi</span>
+          <span class="tag">Yatırım</span>
+        </div>
+      </div>
+
+      <div class="alan-kart" data-color="yesil">
+        <span class="alan-num">04</span>
+        <span class="alan-icon">🎓</span>
+        <div class="alan-baslik">Eğitim & Bilim</div>
+        <p class="alan-aciklama">LGS'den ÖSYM'e, matematik problemlerinden fen bilimlerine kadar her düzeyden öğrenciye kişisel eğitim desteği.</p>
+        <div class="alan-tags">
+          <span class="tag">Matematik</span>
+          <span class="tag">Fizik</span>
+          <span class="tag">ÖSYM</span>
+        </div>
+      </div>
+
+      <div class="alan-kart" data-color="mor">
+        <span class="alan-num">05</span>
+        <span class="alan-icon">🎨</span>
+        <div class="alan-baslik">Sanat & Tasarım</div>
+        <p class="alan-aciklama">Grafik tasarım rehberliği, renk teorisi, UI/UX tavsiyeleri, kreatif yazarlık ve içerik üretimi danışmanlığı.</p>
+        <div class="alan-tags">
+          <span class="tag">UI/UX</span>
+          <span class="tag">Tasarım</span>
+          <span class="tag">Yaratıcı</span>
+        </div>
+      </div>
+
+      <div class="alan-kart" data-color="turuncu">
+        <span class="alan-num">06</span>
+        <span class="alan-icon">🧠</span>
+        <div class="alan-baslik">Psikoloji & Koçluk</div>
+        <p class="alan-aciklama">Stres yönetimi, motivasyon, kariyer planlaması ve kişisel gelişim. Empatiyle dinleyen, çözüm odaklı destek.</p>
+        <div class="alan-tags">
+          <span class="tag">Stres</span>
+          <span class="tag">Kariyer</span>
+          <span class="tag">Koçluk</span>
+        </div>
+      </div>
+
+      <div class="alan-kart" data-color="pembe">
+        <span class="alan-num">07</span>
+        <span class="alan-icon">⚙️</span>
+        <div class="alan-baslik">Mühendislik</div>
+        <p class="alan-aciklama">İnşaat, makine, elektrik, kimya mühendisliği hesaplamaları ve teknik doküman desteği.</p>
+        <div class="alan-tags">
+          <span class="tag">Statik</span>
+          <span class="tag">Devre</span>
+          <span class="tag">CAD</span>
+        </div>
+      </div>
+
+      <div class="alan-kart" data-color="cam">
+        <span class="alan-num">08</span>
+        <span class="alan-icon">📜</span>
+        <div class="alan-baslik">Tarih & Felsefe</div>
+        <p class="alan-aciklama">Osmanlı'dan Cumhuriyet'e Türk tarihi, dünya tarihi analizi, felsefi akımlar ve etik tartışmaları.</p>
+        <div class="alan-tags">
+          <span class="tag">Osmanlı</span>
+          <span class="tag">Felsefe</span>
+          <span class="tag">Kültür</span>
+        </div>
+      </div>
+
+      <div class="alan-kart" data-color="lacivert">
+        <span class="alan-num">09</span>
+        <span class="alan-icon">📈</span>
+        <div class="alan-baslik">İş & Strateji</div>
+        <p class="alan-aciklama">Startup danışmanlığı, iş planı hazırlama, pazarlama stratejileri, e-ticaret ve girişimcilik rehberliği.</p>
+        <div class="alan-tags">
+          <span class="tag">Startup</span>
+          <span class="tag">Pazarlama</span>
+          <span class="tag">E-ticaret</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section class="demo-section" id="demo">
+    <div class="demo-container">
+      <div class="section-label" style="text-align:center; margin-bottom:16px;">Canlı Demo</div>
+      <h2 style="font-family:'Playfair Display',serif; font-size:clamp(2rem,3.5vw,3.5rem); font-weight:900; text-align:center; line-height:1.1;">
+        Ata AI ile <em style="color:var(--altın);font-style:italic;">Konuşun</em>
+      </h2>
+
+      <div class="chat-window">
+        <div class="chat-header">
+          <div class="chat-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="chat-title">Ata AI — Çok Amaçlı Yapay Zeka</div>
+        </div>
+
+        <div class="chat-body" id="chatBody">
+          <div class="msg ai">
+            <div class="msg-avatar">ATA</div>
+            <div class="msg-bubble">
+              Merhaba! Ben <strong>Ata AI</strong>, Türkiye'nin çok alanlı yapay zekasıyım. 
+              Kod yazmaktan sağlık sorularına, hukuktan eğitime kadar her konuda yardımcı olabilirim. 
+              Bugün size nasıl destek verebilirim?
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <input class="chat-input" id="chatInput" type="text" placeholder="Bir soru sorun... (örn: Python'da liste sırala)" />
+          <button class="chat-send" id="sendBtn" onclick="sendMessage()">Gönder</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HAKKINDA -->
+  <section class="hakkinda" id="hakkinda">
+    <div class="hakkinda-visual">
+      <div class="flag-art">
+        <div class="flag-bg"></div>
+        <div class="flag-crescent"></div>
+      </div>
+      <div class="ai-badge">
+        <div class="ai-badge-num">2025</div>
+        <div class="ai-badge-text">Türkiye Yapımı</div>
+      </div>
+    </div>
+
+    <div class="hakkinda-content">
+      <div class="section-label">Neden Ata AI?</div>
+      <h2>Yerli & <em>Güçlü</em><br>Teknoloji</h2>
+      <p>
+        Ata AI, Türkçeyi ana dili olarak kullanan, Türk kültürünü ve hukuk sistemini derinlemesine 
+        anlayan, yerli geliştirme anlayışıyla ortaya çıkmış bir yapay zeka projesidir.
+      </p>
+      <p>
+        Açık kaynak felsefesiyle GitHub'da herkesin katkısına açık olan bu proje, 
+        topluluk katkılarıyla büyümeye ve gelişmeye devam etmektedir.
+      </p>
+
+      <div class="ozellikler">
+        <div class="ozellik">
+          <div class="ozellik-icon">🇹🇷</div>
+          <div class="ozellik-text">
+            <strong>Türkçe Öncelikli</strong>
+            Doğal Türkçe anlama ve üretme kapasitesi
+          </div>
+        </div>
+        <div class="ozellik">
+          <div class="ozellik-icon">🔓</div>
+          <div class="ozellik-text">
+            <strong>Açık Kaynak</strong>
+            GitHub'da özgürce incelenebilir ve katkı yapılabilir
+          </div>
+        </div>
+        <div class="ozellik">
+          <div class="ozellik-icon">⚡</div>
+          <div class="ozellik-text">
+            <strong>Hızlı & Güvenilir</strong>
+            Milisaniyeler içinde yanıt, kesintisiz hizmet
+          </div>
+        </div>
+        <div class="ozellik">
+          <div class="ozellik-icon">🔒</div>
+          <div class="ozellik-text">
+            <strong>Güvenli & Özel</strong>
+            KVKK uyumlu veri işleme politikası
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">ATA <span>AI</span></div>
+        <p class="footer-desc">
+          Türkiye'nin çok amaçlı, açık kaynak yapay zeka projesi.
+          Her alanda uzman, her zaman yanınızda.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Proje</h4>
+        <ul>
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">Katkı Rehberi</a></li>
+          <li><a href="#">Lisans</a></li>
+          <li><a href="#">Sürüm Notları</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Uzmanlık</h4>
+        <ul>
+          <li><a href="#">Kod & Teknoloji</a></li>
+          <li><a href="#">Tıp & Sağlık</a></li>
+          <li><a href="#">Hukuk & Finans</a></li>
+          <li><a href="#">Eğitim</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>İletişim</h4>
+        <ul>
+          <li><a href="#">Discord</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">E-posta</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Ata AI — <span>Türkiye</span> yapımı, açık kaynak</p>
+      <p>Made with <span>❤</span> in Türkiye</p>
+    </div>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx - 6 + 'px';
+      cursor.style.top = my - 6 + 'px';
+    });
+    function animRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx - 18 + 'px';
+      ring.style.top = ry - 18 + 'px';
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+
+    // Chat demo
+    const chatBody = document.getElementById('chatBody');
+    const chatInput = document.getElementById('chatInput');
+
+    const yanıtlar = {
+      default: [
+        "Türkiye'nin yapay zekası olarak size yardımcı olmaya hazırım! Lütfen sorunuzu daha açık belirtin.",
+        "Bu konuda size kapsamlı bir analiz sunabilirim. Hangi alanında detay istersiniz?",
+        "Ata AI olarak bu soruyu Türk bağlamında değerlendirirsek, birkaç önemli nokta öne çıkıyor..."
+      ],
+      kod: ["Python'da listeyi sıralamak için:\n```python\n# Artan sıra\nliste = [3, 1, 4, 1, 5]\nliste.sort()\n\n# sorted() ile orijinali koru\nsıralı = sorted(liste, reverse=True)\nprint(sıralı)  # [5, 4, 3, 1, 1]\n```\nHerhangi bir veri tipi için `.sort()` veya `sorted()` kullanabilirsiniz."],
+      sağlık: ["Sağlık konusunda genel bilgi verebilirim, ancak kesin tanı için lütfen bir doktora başvurun. Genel olarak dengeli beslenme, düzenli uyku ve egzersiz sağlığın temel taşlarıdır."],
+      hukuk: ["Türk hukuku kapsamında bu konuyu değerlendirirsek; ilgili yasal düzenlemeleri incelemenizi ve bir avukata danışmanızı tavsiye ederim. Genel bilgi çerçevesinde yardımcı olabilirim."],
+    };
+
+    function sendMessage() {
+      const val = chatInput.value.trim();
+      if (!val) return;
+
+      // Kullanıcı mesajı
+      const userMsg = document.createElement('div');
+      userMsg.className = 'msg user';
+      userMsg.innerHTML = `<div class="msg-avatar">SİZ</div><div class="msg-bubble">${val}</div>`;
+      chatBody.appendChild(userMsg);
+      chatInput.value = '';
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      // Typing indicator
+      const typing = document.createElement('div');
+      typing.className = 'msg ai';
+      typing.innerHTML = `<div class="msg-avatar">ATA</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+      chatBody.appendChild(typing);
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      setTimeout(() => {
+        chatBody.removeChild(typing);
+
+        let cevap;
+        const lower = val.toLowerCase();
+        if (lower.includes('kod') || lower.includes('python') || lower.includes('javascript') || lower.includes('liste') || lower.includes('yazılım')) {
+          cevap = yanıtlar.kod[0];
+        } else if (lower.includes('sağlık') || lower.includes('hastalık') || lower.includes('doktor') || lower.includes('ilaç')) {
+          cevap = yanıtlar.sağlık[0];
+        } else if (lower.includes('hukuk') || lower.includes('avukat') || lower.includes('kanun') || lower.includes('dava')) {
+          cevap = yanıtlar.hukuk[0];
+        } else {
+          cevap = yanıtlar.default[Math.floor(Math.random() * yanıtlar.default.length)];
+        }
+
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'msg ai';
+        aiMsg.innerHTML = `<div class="msg-avatar">ATA</div><div class="msg-bubble"><strong>Ata AI:</strong> ${cevap}</div>`;
+        chatBody.appendChild(aiMsg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 1400);
+    }
+
+    chatInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    // Scroll animations
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.alan-kart').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(40px)';
+      el.style.transition = `opacity 0.6s ${i * 0.07}s ease, transform 0.6s ${i * 0.07}s ease, background 0.4s`;
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
